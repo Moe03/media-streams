@@ -7,8 +7,8 @@ var WebSocketServer = require("websocket").server;
 var dispatcher = new HttpDispatcher();
 var wsserver = http.createServer(handleRequest);
 
-const HTTP_SERVER_PORT = 8080;
-const REPEAT_THRESHOLD = 50;
+const HTTP_SERVER_PORT = 3000;
+const REPEAT_THRESHOLD = 10;
 
 var mediaws = new WebSocketServer({
   httpServer: wsserver,
@@ -131,9 +131,9 @@ class MediaStream {
     log("To Twilio: Sending mark event", markMessage);
     this.connection.sendUTF(JSON.stringify(markMessage));
     this.repeatCount++;
-    if (this.repeatCount === 5) {
+    if (this.repeatCount === 200) {
       log(`Server: Repeated ${this.repeatCount} times...closing`);
-      this.connection.close(1000, "Repeated 5 times");
+      this.connection.close(1000, "Repeated 30 times");
     }
   }
 
